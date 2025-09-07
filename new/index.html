@@ -330,6 +330,9 @@ button:hover { background-color: #0353e9; }
             likeCount.className = 'like-count';
             likeCount.textContent = `${item.likes || 0}`;
             likeBtn.addEventListener('click', async () => {
+              // optimistic increment
+              const prev = parseInt(likeCount.textContent, 10) || 0;
+              likeCount.textContent = `${prev + 1}`;
               try {
                 likeBtn.disabled = true;
                 const form = new URLSearchParams();
@@ -337,9 +340,13 @@ button:hover { background-color: #0353e9; }
                 form.set('id', item.id);
                 const res = await fetch(BASE, { method: 'POST', body: form });
                 const data = await res.json();
-                if (data && data.status === 'ok') {
-                  likeCount.textContent = `${data.likes}`;
+                if (data && data.status === 'ok' && typeof data.likes !== 'undefined') {
+                  likeCount.textContent = `${data.likes}`; // replace with server value
+                } else {
+                  likeCount.textContent = `${prev}`; // revert on unexpected response
                 }
+              } catch (e) {
+                likeCount.textContent = `${prev}`; // revert on error
               } finally { likeBtn.disabled = false; }
             });
             likeRow.appendChild(likeBtn);
