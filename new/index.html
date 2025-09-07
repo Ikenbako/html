@@ -180,15 +180,9 @@ button:hover { background-color: #0353e9; }
         if (!BASE) return; // not configured yet
         replyContainer.innerHTML = '';
         try {
-          const data = await new Promise((resolve, reject) => {
-            const cb = 'jsonp_cb_' + Math.random().toString(36).slice(2);
-            const s = document.createElement('script');
-            s.src = `${BASE}?action=list&filter=replied&callback=${cb}`;
-            window[cb] = (payload) => { resolve(payload); cleanup(); };
-            s.onerror = () => { reject(new Error('JSONP load error')); cleanup(); };
-            function cleanup(){ delete window[cb]; s.remove(); }
-            document.body.appendChild(s);
-          });
+          const url = `${BASE}?action=list&filter=replied`;
+          const res = await fetch(url, { method: 'GET' });
+          const data = await res.json();
           if (!Array.isArray(data)) return;
           data.forEach(item => {
             if (!item.reply) return;
