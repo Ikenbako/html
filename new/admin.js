@@ -18,6 +18,11 @@
 
   function alertError(err) { console.error(err); alert('エラーが発生しました。時間をおいて再度お試しください。'); }
 
+  function formatTime(iso) {
+    if (!iso) return '';
+    try { const d = new Date(iso); return d.toLocaleString(); } catch (_) { return iso; }
+  }
+
   async function fetchList(filter) {
     if (!BASE) { alert('設定が未完了です（config.js の GAS_BASE_URL を設定）'); return []; }
     const url = `${BASE}?action=list&filter=${encodeURIComponent(filter)}`;
@@ -34,6 +39,13 @@
       opinions.forEach(op => {
         const opinionDiv = document.createElement('div');
         opinionDiv.className = 'opinion-div';
+        if (op.imageUrl) {
+          const img = document.createElement('img');
+          img.className = 'thumb';
+          img.src = op.imageUrl;
+          img.alt = '添付画像';
+          opinionDiv.appendChild(img);
+        }
         const opinionP = document.createElement('p');
         opinionP.className = 'opinion-p';
         opinionP.textContent = '意見：' + op.opinion;
@@ -91,8 +103,12 @@
         replyForm.appendChild(replyTextarea);
         replyForm.appendChild(replyButton);
         replyForm.appendChild(deleteButton);
-        opinionDiv.appendChild(opinionP);
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+  meta.textContent = '投稿: ' + formatTime(op.createdAt);
+  opinionDiv.appendChild(opinionP);
         opinionDiv.appendChild(replyForm);
+  opinionDiv.appendChild(meta);
         opinionContainer.appendChild(opinionDiv);
       });
     } catch (e) { alertError(e); }
@@ -105,12 +121,22 @@
       opinions.forEach(op => {
         const opinionDiv = document.createElement('div');
         opinionDiv.className = 'opinion-div';
+        if (op.imageUrl) {
+          const img = document.createElement('img');
+          img.className = 'thumb';
+          img.src = op.imageUrl;
+          img.alt = '添付画像';
+          opinionDiv.appendChild(img);
+        }
         const opinionP = document.createElement('p');
         opinionP.className = 'opinion-p';
         opinionP.textContent = '意見：' + op.opinion;
         const replyP = document.createElement('p');
         replyP.className = 'reply-p';
         replyP.textContent = '返信：' + (op.reply || '');
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        meta.textContent = '投稿: ' + formatTime(op.createdAt) + ' / 返信: ' + formatTime(op.repliedAt);
         const deleteButton = document.createElement('button');
         deleteButton.type = 'button';
         deleteButton.textContent = '削除';
@@ -133,7 +159,8 @@
         opinionDiv.appendChild(opinionP);
         opinionDiv.appendChild(replyP);
         opinionDiv.appendChild(deleteButton);
-        repliedContainer.appendChild(opinionDiv);
+  opinionDiv.appendChild(meta);
+  repliedContainer.appendChild(opinionDiv);
       });
     } catch (e) { alertError(e); }
   }

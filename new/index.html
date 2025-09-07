@@ -15,19 +15,18 @@
 
 /* フォントの設定 */
 body {
-    font-family: 'M PLUS 1', sans-serif;
-font-family: 'Noto Sans JP', sans-serif;
-  font-size: 16px; /* 基本のフォントサイズを指定する */
-  color: #333; /* 基本の文字色を指定する */
-
+  font-family: 'M PLUS 1', 'Noto Sans JP', sans-serif;
+  font-size: 16px;
+  color: #222;
+  background: #f6f7f9;
 }
 
 /* ヘッダーの設定 */
 h1 {
-  text-align: center; /* 中央揃えにする */
-  font-size: 2rem; /* フォントサイズを大きくする */
-  padding: 20px; /* パディングを付ける */
-  background-color: #0077cc; /* 背景色を指定する */
+  text-align: center;
+  font-size: 1.75rem;
+  padding: 16px;
+  background-color: #0f62fe; /* IBM Blue */
   color: white;
 }
 
@@ -38,9 +37,9 @@ p {
 
 /* フォームの設定 */
 form {
-  max-width: 600px; /* 最大幅を指定する */
-  margin: 0 auto; /* 中央揃えにする */
-  font-size: 17px;
+  max-width: 640px;
+  margin: 0 auto;
+  font-size: 16px;
 }
 
 /* ラベルの設定 */
@@ -50,50 +49,51 @@ label {
 }
 
 /* テキストエリアの設定 */
-textarea {
-  display: block; /* ブロック要素にする */
-  width: 100%; /* 幅を100%にする */
-  height: 100px; /* 高さを指定する */
-  border: 1px solid #ccc; /* 枠線を指定する */
-  padding: 10px; /* パディングを付ける */
+textarea, input[type="file"] {
+  display: block;
+  width: 100%;
+  border: 1px solid #dfe3e8;
+  padding: 10px;
   font-size: 15px;
+  border-radius: 6px;
+  background: white;
 }
+textarea { height: 120px; }
 
 /* ボタンの設定 */
 button {
-      width: 100%; /* 幅を100%にする */
-      background-color: #0077cc;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 18px;
-      margin-bottom: 15px;
-      margin-top: 15px;
-      height: 40px; 
+  width: 100%;
+  background-color: #0f62fe;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 12px;
+  margin-top: 12px;
+  height: 44px;
+}
+button:hover { background-color: #0353e9; }
+
+  #container {
+    max-width: 720px;
+    margin: 24px auto 24px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    border: 1px solid #e6e8eb;
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.04);
     }
 
-      #container {
-            max-width: 700px;
-            margin: 0 auto;
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        #container2 {
-            max-width: 700px;
-            margin: 0 auto;
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
+    #container2 {
+      max-width: 720px;
+      margin: 0 auto 40px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 12px;
+      border: 1px solid #e6e8eb;
+      box-shadow: 0px 1px 2px rgba(0,0,0,0.04);
+    }
 
 #reply-container {
   max-width: 600px; /* 最大幅を指定する */
@@ -101,25 +101,20 @@ button {
 }
 
 /* 意見と返信のdiv要素の設定 */
-.opinion-div {
-  margin-bottom: 20px; /* 下にマージンを付ける */ 
-}
+.opinion-div { margin-bottom: 16px; border: 1px solid #eee; border-radius: 10px; overflow: hidden; }
 
 /* 意見と返信のp要素の設定 */ 
-.opinion-p, .reply-p {
-  padding: 10px; /* パディングを付ける */ 
-}
+.opinion-p, .reply-p, .meta { padding: 10px; }
 
 
 /* 意見のp要素の設定 */ 
-.opinion-p {
-  background-color: #f0f0f0; /* 背景色を指定する */
-}
+.opinion-p { background-color: #fafbfc; }
 
 /* 返信のp要素の設定 */ 
-.reply-p {
-  background-color: #e0e0e0; /* 背景色を指定する */
-}
+.reply-p { background-color: #f5f7f9; }
+
+.thumb { width: 100%; max-height: 320px; object-fit: cover; display:block; }
+.meta { font-size: 12px; color: #666; border-top: 1px dashed #eee; }
 
 /* メディアクエリで画面幅が600px以下のときのスタイルを指定する */
 @media screen and (max-width: 600px) {
@@ -147,6 +142,8 @@ button {
   <form id="opinion-form">
     <label for="opinion">あなたの意見を入力してください</label>
     <textarea id="opinion" name="opinion" rows="5" cols="40" required></textarea>
+  <label for="photo">写真（任意・画像のみ）</label>
+  <input id="photo" name="photo" type="file" accept="image/*" />
     <button type="submit">送信</button>
   </form>
 </div>
@@ -170,6 +167,11 @@ button {
 
       function alertError(err) { console.error(err); alert('エラーが発生しました。時間をおいて再度お試しください。'); }
 
+      function formatTime(iso) {
+        if (!iso) return '';
+        try { const d = new Date(iso); return d.toLocaleString(); } catch (_) { return iso; }
+      }
+
       async function listReplied() {
         if (!BASE) return; // not configured yet
         replyContainer.innerHTML = '';
@@ -188,8 +190,19 @@ button {
             const rp = document.createElement('p');
             rp.className = 'reply-p';
             rp.textContent = `返信：${item.reply}`;
+            if (item.imageUrl) {
+              const img = document.createElement('img');
+              img.className = 'thumb';
+              img.src = item.imageUrl;
+              img.alt = '添付画像';
+              div.appendChild(img);
+            }
+            const meta = document.createElement('div');
+            meta.className = 'meta';
+            meta.textContent = `投稿: ${formatTime(item.createdAt)} / 返信: ${formatTime(item.repliedAt)}`;
             div.appendChild(op);
             div.appendChild(rp);
+            div.appendChild(meta);
             replyContainer.appendChild(div);
           });
         } catch (e) { alertError(e); }
@@ -198,13 +211,23 @@ button {
       opinionForm.addEventListener('submit', async function(event) {
         event.preventDefault();
         const opinion = opinionForm.opinion.value.trim();
+        const photoInput = document.getElementById('photo');
         if (!opinion) return;
         if (!BASE) { alert('設定が未完了です（config.js の GAS_BASE_URL を設定）'); return; }
         try {
-          const form = new URLSearchParams();
-          form.set('action', 'add');
-          form.set('opinion', opinion);
-          const res = await fetch(BASE, { method: 'POST', body: form });
+          let res;
+          if (photoInput && photoInput.files && photoInput.files[0]) {
+            const fd = new FormData();
+            fd.append('action', 'add');
+            fd.append('opinion', opinion);
+            fd.append('photo', photoInput.files[0]);
+            res = await fetch(BASE, { method: 'POST', body: fd });
+          } else {
+            const form = new URLSearchParams();
+            form.set('action', 'add');
+            form.set('opinion', opinion);
+            res = await fetch(BASE, { method: 'POST', body: form });
+          }
           const data = await res.json();
           if (data && data.status === 'ok') {
             opinionForm.reset();

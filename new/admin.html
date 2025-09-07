@@ -16,20 +16,18 @@
 
 /* フォントの設定 */
 body {
-  font-family: "Noto Sans JP", sans-serif; /* 日本語対応のフォントを指定する */
-  font-size: 16px; /* 基本のフォントサイズを指定する */
-  color: #333; /* 基本の文字色を指定する */
-
-  font-family: 'M PLUS 1', sans-serif;
-font-family: 'Noto Sans JP', sans-serif;
+  font-family: 'M PLUS 1', 'Noto Sans JP', sans-serif;
+  font-size: 16px;
+  color: #222;
+  background: #f6f7f9;
 }
 
 /* ヘッダーの設定 */
 h1 {
-  text-align: center; /* 中央揃えにする */
-  font-size: 2rem; /* フォントサイズを大きくする */
-  padding: 20px; /* パディングを付ける */
-  background-color: #4bec86; /* 背景色を指定する */
+  text-align: center;
+  font-size: 1.75rem;
+  padding: 16px;
+  background-color: #24a148; /* Green without gradient */
   color: white;
 }
 
@@ -39,27 +37,16 @@ p {
 }
 
 /* 意見コンテナーの設定 */
-#opinion-container {
-  max-width: 600px; /* 最大幅を指定する */
-  margin: 0 auto; /* 中央揃えにする */ 
-}
+#opinion-container { max-width: 720px; margin: 0 auto; }
 
 /* 意見と返信フォームのdiv要素の設定 */
-.opinion-div {
-  margin-bottom: 20px; /* 下にマージンを付ける */ 
-}
+.opinion-div { margin-bottom: 16px; border: 1px solid #eee; border-radius: 10px; overflow: hidden; }
 
 /* 意見のp要素の設定 */ 
-.opinion-p {
-  padding: 10px; /* パディングを付ける */
-  background-color: #f0f0f0; /* 背景色を指定する */
-}
+.opinion-p { padding: 10px; background-color: #fafbfc; }
 
 /* 返信フォームの設定 */
-.reply-form {
-  display: flex; /* フレックスボックスにする */
-  flex-wrap: wrap; /* 折り返しを許可する */
-}
+.reply-form { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start; padding: 10px; }
 
 /* ラベルの設定 */
 label {
@@ -69,44 +56,25 @@ label {
 
 /* テキストエリアの設定 */
 textarea {
-  flex-grow: 1; /* 残りのスペースを埋める */
-  height: 80px; /* 高さを指定する */
-  border: 1px solid #ccc; /* 枠線を指定する */
-  padding: 10px; /* パディングを付ける */
+  flex-grow: 1;
+  height: 80px;
+  border: 1px solid #dfe3e8;
+  padding: 10px;
   font-size: 15px;
+  border-radius: 6px;
+  background: white;
 }
 
 /* ボタンの設定 */
-button {
-  width: 100px; /* 幅を指定する */
-  height: 40px; /* 高さを指定する */
-  border: none; /* 枠線を消す */
-  background-color: #333; /* 背景色を指定する */
-  color: #fff; /* 文字色を指定する */
-  font-weight: bold; /* 文字を太くする */
-}
+button { min-width: 96px; height: 40px; border: none; background-color: #0f62fe; color: #fff; font-weight: 600; border-radius: 8px; cursor: pointer; }
+button:hover { background: #0353e9; }
 
-#container {
-            max-width: 700px;
-            margin: 0 auto;
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
+#container { max-width: 760px; margin: 24px auto; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #e6e8eb; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
 
-        #container2 {
-            max-width: 700px;
-            margin: 0 auto;
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
+  #container2 { max-width: 760px; margin: 0 auto 40px; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #e6e8eb; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+
+.thumb { width: 100%; max-height: 360px; object-fit: cover; display:block; }
+.meta { font-size: 12px; color: #666; padding: 8px 10px; border-top: 1px dashed #eee; }
 
 /* メディアクエリで画面幅が600px以下のときのスタイルを指定する */
 @media screen and (max-width: 600px) {
