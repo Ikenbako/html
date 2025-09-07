@@ -195,6 +195,14 @@ button:hover { background-color: #0353e9; }
               img.className = 'thumb';
               img.src = item.imageUrl;
               img.alt = '添付画像';
+              img.onerror = () => {
+                // For formats the browser can’t render (e.g., HEIC), show a link instead
+                const a = document.createElement('a');
+                a.href = item.imageUrl;
+                a.target = '_blank';
+                a.textContent = '画像を開く';
+                img.replaceWith(a);
+              };
               div.appendChild(img);
             }
             const meta = document.createElement('div');
@@ -216,12 +224,22 @@ button:hover { background-color: #0353e9; }
         if (!BASE) { alert('設定が未完了です（config.js の GAS_BASE_URL を設定）'); return; }
         try {
           let res;
-          if (photoInput && photoInput.files && photoInput.files[0]) {
-            const fd = new FormData();
-            fd.append('action', 'add');
-            fd.append('opinion', opinion);
-            fd.append('photo', photoInput.files[0]);
-            res = await fetch(BASE, { method: 'POST', body: fd });
+          const file = photoInput && photoInput.files && photoInput.files[0];
+          if (file) {
+            // Convert to base64 data URL
+            const dataUrl = await new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = reject;
+              reader.readAsDataURL(file);
+            });
+            const form = new URLSearchParams();
+            form.set('action', 'add');
+            form.set('opinion', opinion);
+            form.set('imageBase64', dataUrl);
+            form.set('imageType', file.type || '');
+            form.set('imageName', file.name || '');
+            res = await fetch(BASE, { method: 'POST', body: form });
           } else {
             const form = new URLSearchParams();
             form.set('action', 'add');

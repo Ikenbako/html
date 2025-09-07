@@ -3,6 +3,6 @@
 // 2) Paste the deployment URL below
 
 window.IKENBAKO_CONFIG = {
-  GAS_BASE_URL: "https://script.google.com/macros/s/AKfycbzd6JvEjhVyVVnNgl5BliIDD_pw6Gt8a4UoPtBvrlShrQYSvtDs9maQHagOL2IfscqH/exec", // e.g. https://script.google.com/macros/s/AKfycbx.../exec
+  GAS_BASE_URL: "https://script.google.com/macros/s/AKfycbxPj1MZTeiFoFjHsWec8g7rLDLbHICEFMBYCBybJGkJPqzZCFuH0g0AqqVMWPiMX-nX/exec", // e.g. https://script.google.com/macros/s/AKfycbx.../exec
   ADMIN_KEY: "seitokai2023" // must match ADMIN_KEY in Code.gs
 };

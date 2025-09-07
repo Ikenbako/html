@@ -44,6 +44,13 @@
           img.className = 'thumb';
           img.src = op.imageUrl;
           img.alt = '添付画像';
+          img.onerror = () => {
+            const a = document.createElement('a');
+            a.href = op.imageUrl;
+            a.target = '_blank';
+            a.textContent = '画像を開く';
+            img.replaceWith(a);
+          };
           opinionDiv.appendChild(img);
         }
         const opinionP = document.createElement('p');
@@ -126,6 +133,13 @@
           img.className = 'thumb';
           img.src = op.imageUrl;
           img.alt = '添付画像';
+          img.onerror = () => {
+            const a = document.createElement('a');
+            a.href = op.imageUrl;
+            a.target = '_blank';
+            a.textContent = '画像を開く';
+            img.replaceWith(a);
+          };
           opinionDiv.appendChild(img);
         }
         const opinionP = document.createElement('p');
