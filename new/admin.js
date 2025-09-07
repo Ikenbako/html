@@ -25,9 +25,15 @@
 
   async function fetchList(filter) {
     if (!BASE) { alert('設定が未完了です（config.js の GAS_BASE_URL を設定）'); return []; }
-    const url = `${BASE}?action=list&filter=${encodeURIComponent(filter)}`;
-    const res = await fetch(url);
-    const data = await res.json();
+    const data = await new Promise((resolve, reject) => {
+      const cb = 'jsonp_cb_' + Math.random().toString(36).slice(2);
+      const s = document.createElement('script');
+      s.src = `${BASE}?action=list&filter=${encodeURIComponent(filter)}&callback=${cb}`;
+      window[cb] = (payload) => { resolve(payload); cleanup(); };
+      s.onerror = () => { reject(new Error('JSONP load error')); cleanup(); };
+      function cleanup(){ delete window[cb]; s.remove(); }
+      document.body.appendChild(s);
+    });
     if (Array.isArray(data)) return data;
     return [];
   }
