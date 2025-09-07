@@ -1,230 +1,201 @@
-// パスワードを定義する
-var password = "seitokai2023";
+// GAS + スプレッドシート版 管理ページ
+(function() {
+  const cfg = window.IKENBAKO_CONFIG || {};
+  const BASE = cfg.GAS_BASE_URL || '';
+  const ADMIN_KEY = cfg.ADMIN_KEY || '';
 
-// パスワードを入力するプロンプトを表示する
-var input = prompt("パスワードを入力してください");
-
-// パスワードが正しいかどうか判定する
-if (input == password) {
-  // 正しい場合は、ページの内容を表示する
-  document.getElementById("content").style.display = "block";
-} else {
-  // 間違っている場合は、アラートを表示してページを閉じる
-  alert("パスワードが違います");
-  window.close();
-}
-
-
-
-// Firebaseの設定を書く
-var firebaseConfig = {
-    apiKey: "AIzaSyDvIL9X-qSqsw6i3Rp4TK98uygSfmI0v4A",
-  authDomain: "chat-a1eca.firebaseapp.com",
-  databaseURL: "https://chat-a1eca-default-rtdb.firebaseio.com",
-  projectId: "chat-a1eca",
-  storageBucket: "chat-a1eca.appspot.com",
-  messagingSenderId: "872682257719",
-  appId: "your-app-id",
-  measurementId: "1:872682257719:web:efdf8105ece4e019516eb2"
-  };
-  
-  // Firebaseを初期化する
-  firebase.initializeApp(firebaseConfig);
-  
-  // Realtime databaseを参照する
-  var database = firebase.database();
-  
-  // 意見コンテナーを取得する
-  var opinionContainer = document.getElementById("opinion-container");
-  
-  // Realtime databaseから意見と返信を取得して表示する関数を定義する
-  function showOpinions() {
-    // 意見コンテナーを空にする
-    opinionContainer.innerHTML = "";
-  
-    // Realtime databaseから意見と返信を取得する
-    database.ref("opinions").once("value", function(snapshot) {
-      // 取得したデータを配列に変換する
-      var opinions = [];
-      snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key;
-        var value = childSnapshot.val();
-        opinions.push({
-          key: key,
-          opinion: value.opinion,
-          reply: value.reply
-        });
-      });
-  
-      // 配列の要素ごとに意見コンテナーに表示する要素を作成する
-      opinions.forEach(function(opinion) {
-        // 返信が空の場合だけ表示する
-        if (opinion.reply === "") {
-          // 意見と返信フォームを表示するdiv要素を作成する
-          var opinionDiv = document.createElement("div");
-          opinionDiv.className = "opinion-div";
-  
-          // 意見を表示するp要素を作成する
-          var opinionP = document.createElement("p");
-          opinionP.className = "opinion-p";
-          opinionP.textContent = "意見：" + opinion.opinion;
-  
-          // 返信フォームを作成する
-          var replyForm = document.createElement("form");
-          replyForm.className = "reply-form";
-          
-          // 返信フォームにラベルとテキストエリアとボタンを追加する
-  var replyLabel = document.createElement("label");
-  replyLabel.textContent = "返信：";
-  var replyTextarea = document.createElement("textarea");
-  replyTextarea.name = "reply";
-  replyTextarea.rows = "3";
-  replyTextarea.cols = "30";
-  replyTextarea.value = opinion.reply; // 既に返信があれば表示する
-  var replyButton = document.createElement("button");
-  replyButton.type = "submit";
-  replyButton.textContent = "送信";
-  // 削除ボタンを作成する
-  var deleteButton = document.createElement("button");
-  deleteButton.type = "button";
-  deleteButton.textContent = "削除";
-  // 削除ボタンがクリックされたときに実行する関数を定義する
-  deleteButton.addEventListener("click", function(event) {
-    // 確認ダイアログを表示する
-    if (confirm("本当にこの意見を削除しますか？")) {
-      // Realtime databaseから意見を削除する
-      database.ref("opinions/" + opinion.key).remove();
-      // 削除した意見と返信フォームを消す
-      opinionDiv.remove();
-    }
-  });
-  replyForm.appendChild(replyLabel);
-  replyForm.appendChild(replyTextarea);
-  replyForm.appendChild(replyButton);
-  // 返信フォームに削除ボタンを追加する
-  replyForm.appendChild(deleteButton);
-  
-          replyForm.appendChild(replyLabel);
-          replyForm.appendChild(replyTextarea);
-          replyForm.appendChild(replyButton);
-  
-          // 返信フォームが送信されたときに実行する関数を定義する
-          replyForm.addEventListener("submit", function(event) {
-            // デフォルトの動作をキャンセルする
-            event.preventDefault();
-  
-            // 返信フォームから入力された値を取得する
-            var reply = replyForm.reply.value;
-  
-            // Realtime databaseに返信を保存する
-            database.ref("opinions/" + opinion.key).update({
-              reply: reply
-            });
-            
-            // 返信した意見と返信フォームを消す
-            opinionDiv.remove();
-          });
-  
-          // div要素にp要素と返信フォームを追加する
-          opinionDiv.appendChild(opinionP);
-          opinionDiv.appendChild(replyForm);
-  
-          // 意見コンテナーにdiv要素を追加する
-          opinionContainer.appendChild(opinionDiv);
-        }
-      });
-    });
+  // シンプルなパスワードゲート（同じ値をADMIN_KEYとして使用）
+  const input = prompt('パスワードを入力してください');
+  if (!input || input !== ADMIN_KEY) {
+    alert('パスワードが違います');
+    try { window.close(); } catch (e) {}
+    return;
   }
-  
-  // ページが読み込まれたときに、意見と返信を表示する関数を実行する
-  window.onload = function() {
-    showOpinions();
-  };
-  
-  // Realtime databaseの意見が変更されたときに、意見と返信を表示する関数を実行する
-  database.ref("opinions").on("child_changed", function(childSnapshot) {
-    showOpinions();
-  });
-  
-  
-  
-  // 返信済みコンテナーを取得する
-  var repliedContainer = document.getElementById("replied-container");
-  
-  // Realtime databaseから返信済みの意見と返信を取得して表示する関数を定義する
-  function showReplied() {
-    // 返信済みコンテナーを空にする
-    repliedContainer.innerHTML = "";
-  
-    // Realtime databaseから意見と返信を取得する
-    database.ref("opinions").once("value", function(snapshot) {
-      // 取得したデータを配列に変換する
-      var opinions = [];
-      snapshot.forEach(function(childSnapshot) {
-        var key = childSnapshot.key;
-        var value = childSnapshot.val();
-        opinions.push({
-          key: key,
-          opinion: value.opinion,
-          reply: value.reply
-        });
-      });
-  
-      // 配列の要素ごとに返信済みコンテナーに表示する要素を作成する
-      opinions.forEach(function(opinion) {
-        // 返信が空でない場合だけ表示する
-        if (opinion.reply !== "") {
-          // 意見と返信を表示するdiv要素を作成する
-          var opinionDiv = document.createElement("div");
-          opinionDiv.className = "opinion-div";
-  
-          // 意見を表示するp要素を作成する
-          var opinionP = document.createElement("p");
-          opinionP.className = "opinion-p";
-          opinionP.textContent = "意見：" + opinion.opinion;
-  
-          // 返信を表示するp要素を作成する
-          var replyP = document.createElement("p");
-          replyP.className = "reply-p";
-          replyP.textContent = "返信：" + opinion.reply;
-  
-          // 削除ボタンを作成する
-          var deleteButton = document.createElement("button");
-          deleteButton.type = "button";
-          deleteButton.textContent = "削除";
-          
-          // 削除ボタンがクリックされたときに実行する関数を定義する
-          deleteButton.addEventListener("click", function(event) {
-            // 確認ダイアログを表示する
-            if (confirm("本当にこの意見と返信を削除しますか？")) {
-              // Realtime databaseから意見と返信を削除する
-              database.ref("opinions/" + opinion.key).remove();
-              // 削除した意見と返信フォームを消す
+  document.getElementById('content').style.display = 'block';
+
+  const opinionContainer = document.getElementById('opinion-container');
+  const repliedContainer = document.getElementById('replied-container');
+
+  function alertError(err) { console.error(err); alert('エラーが発生しました。時間をおいて再度お試しください。'); }
+
+  function formatTime(iso) {
+    if (!iso) return '';
+    try { const d = new Date(iso); return d.toLocaleString(); } catch (_) { return iso; }
+  }
+
+  async function fetchList(filter) {
+    if (!BASE) { alert('設定が未完了です（config.js の GAS_BASE_URL を設定）'); return []; }
+    const url = `${BASE}?action=list&filter=${encodeURIComponent(filter)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (Array.isArray(data)) return data;
+    return [];
+  }
+
+  async function showOpinions() {
+    opinionContainer.innerHTML = '';
+    const listSpinner = document.createElement('div');
+    listSpinner.className = 'spinner-inline';
+    opinionContainer.appendChild(listSpinner);
+    try {
+      const opinions = await fetchList('unreplied');
+      opinionContainer.innerHTML = '';
+      opinions.forEach(op => {
+        const opinionDiv = document.createElement('div');
+        opinionDiv.className = 'opinion-div';
+        if (op.imageUrl) {
+          const img = document.createElement('img');
+          img.className = 'thumb';
+          img.src = op.imageUrl;
+          img.alt = '添付画像';
+          img.onerror = () => {
+            const a = document.createElement('a');
+            a.href = op.imageUrl;
+            a.target = '_blank';
+            a.textContent = '画像を開く';
+            img.replaceWith(a);
+          };
+          opinionDiv.appendChild(img);
+        }
+        const opinionP = document.createElement('p');
+        opinionP.className = 'opinion-p';
+        opinionP.textContent = '意見：' + op.opinion;
+
+        const replyForm = document.createElement('form');
+        replyForm.className = 'reply-form';
+        const replyLabel = document.createElement('label');
+        replyLabel.textContent = '返信：';
+        const replyTextarea = document.createElement('textarea');
+        replyTextarea.name = 'reply';
+        replyTextarea.rows = '3';
+        replyTextarea.cols = '30';
+        replyTextarea.value = op.reply || '';
+        const replyButton = document.createElement('button');
+        replyButton.type = 'submit';
+        replyButton.textContent = '送信';
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.textContent = '削除';
+
+        deleteButton.addEventListener('click', async function() {
+          if (!confirm('本当にこの意見を削除しますか？')) return;
+          try {
+            deleteButton.disabled = true;
+            deleteButton.classList.add('loading');
+            const form = new URLSearchParams();
+            form.set('action', 'delete');
+            form.set('id', op.id);
+            form.set('adminKey', ADMIN_KEY);
+            const res = await fetch(BASE, { method: 'POST', body: form });
+            const data = await res.json();
+            if (data && data.status === 'ok') {
               opinionDiv.remove();
-            }
-          });
-  
-          // div要素にp要素と削除ボタンを追加する
-          opinionDiv.appendChild(opinionP);
-          opinionDiv.appendChild(replyP);
-          opinionDiv.appendChild(deleteButton);
-  
-          // 返信済みコンテナーにdiv要素を追加する
-          repliedContainer.appendChild(opinionDiv);
-        }
+            } else { alertError(data); }
+          } catch (e) { alertError(e); }
+          finally { deleteButton.disabled = false; deleteButton.classList.remove('loading'); }
+        });
+
+        replyForm.addEventListener('submit', async function(event) {
+          event.preventDefault();
+          const reply = replyTextarea.value.trim();
+          try {
+            replyButton.disabled = true;
+            replyButton.classList.add('loading');
+            const form = new URLSearchParams();
+            form.set('action', 'reply');
+            form.set('id', op.id);
+            form.set('reply', reply);
+            form.set('adminKey', ADMIN_KEY);
+            const res = await fetch(BASE, { method: 'POST', body: form });
+            const data = await res.json();
+            if (data && data.status === 'ok') {
+              opinionDiv.remove();
+              showReplied();
+            } else { alertError(data); }
+          } catch (e) { alertError(e); }
+          finally { replyButton.disabled = false; replyButton.classList.remove('loading'); }
+        });
+
+        replyForm.appendChild(replyLabel);
+        replyForm.appendChild(replyTextarea);
+        replyForm.appendChild(replyButton);
+        replyForm.appendChild(deleteButton);
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+  meta.textContent = '投稿: ' + formatTime(op.createdAt) + (typeof op.likes !== 'undefined' ? ' / 👍 ' + (op.likes || 0) : '');
+  opinionDiv.appendChild(opinionP);
+        opinionDiv.appendChild(replyForm);
+  opinionDiv.appendChild(meta);
+        opinionContainer.appendChild(opinionDiv);
       });
-    });
+    } catch (e) { alertError(e); }
   }
-  
-  // ページが読み込まれたときに、意見と返信と返信済みリストを表示する関数を実行する
-  window.onload = function() {
-    showOpinions();
-    showReplied();
-  };
-  
-  // Realtime databaseの意見が変更されたときに、意見と返信と返信済みリストを表示する関数を実行する
-  database.ref("opinions").on("child_changed", function(childSnapshot) {
+
+  async function showReplied() {
+    repliedContainer.innerHTML = '';
+    const listSpinner = document.createElement('div');
+    listSpinner.className = 'spinner-inline';
+    repliedContainer.appendChild(listSpinner);
+    try {
+      const opinions = await fetchList('replied');
+      repliedContainer.innerHTML = '';
+      opinions.forEach(op => {
+        const opinionDiv = document.createElement('div');
+        opinionDiv.className = 'opinion-div';
+        if (op.imageUrl) {
+          const img = document.createElement('img');
+          img.className = 'thumb';
+          img.src = op.imageUrl;
+          img.alt = '添付画像';
+          img.onerror = () => {
+            const a = document.createElement('a');
+            a.href = op.imageUrl;
+            a.target = '_blank';
+            a.textContent = '画像を開く';
+            img.replaceWith(a);
+          };
+          opinionDiv.appendChild(img);
+        }
+        const opinionP = document.createElement('p');
+        opinionP.className = 'opinion-p';
+        opinionP.textContent = '意見：' + op.opinion;
+        const replyP = document.createElement('p');
+        replyP.className = 'reply-p';
+        replyP.textContent = '返信：' + (op.reply || '');
+  const meta = document.createElement('div');
+        meta.className = 'meta';
+  meta.textContent = '投稿: ' + formatTime(op.createdAt) + ' / 返信: ' + formatTime(op.repliedAt) + (typeof op.likes !== 'undefined' ? ' / 👍 ' + (op.likes || 0) : '');
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.textContent = '削除';
+
+        deleteButton.addEventListener('click', async function() {
+          if (!confirm('本当にこの意見と返信を削除しますか？')) return;
+          try {
+            const form = new URLSearchParams();
+            form.set('action', 'delete');
+            form.set('id', op.id);
+            form.set('adminKey', ADMIN_KEY);
+            const res = await fetch(BASE, { method: 'POST', body: form });
+            const data = await res.json();
+            if (data && data.status === 'ok') {
+              opinionDiv.remove();
+            } else { alertError(data); }
+          } catch (e) { alertError(e); }
+        });
+
+        opinionDiv.appendChild(opinionP);
+        opinionDiv.appendChild(replyP);
+        opinionDiv.appendChild(deleteButton);
+  opinionDiv.appendChild(meta);
+  repliedContainer.appendChild(opinionDiv);
+      });
+    } catch (e) { alertError(e); }
+  }
+
+  window.addEventListener('load', function() {
     showOpinions();
     showReplied();
   });
+})();
   

@@ -15,20 +15,21 @@
 
 /* フォントの設定 */
 body {
-    font-family: 'M PLUS 1', sans-serif;
-font-family: 'Noto Sans JP', sans-serif;
-  font-size: 16px; /* 基本のフォントサイズを指定する */
-  color: #333; /* 基本の文字色を指定する */
-
+  font-family: 'M PLUS 1', 'Noto Sans JP', sans-serif;
+  font-size: 16px;
+  color: #222;
+  background: #f6f7f9;
 }
 
 /* ヘッダーの設定 */
 h1 {
-  text-align: center; /* 中央揃えにする */
-  font-size: 2rem; /* フォントサイズを大きくする */
-  padding: 20px; /* パディングを付ける */
-  background-color: #0077cc; /* 背景色を指定する */
+  text-align: center;
+  font-size: 1.75rem;
+  padding: 16px;
+  background-color: #0f62fe; /* IBM Blue */
   color: white;
+  position: relative;
+  padding-right: 56px; /* space for share icon */
 }
 
 /* 段落の設定 */
@@ -38,9 +39,9 @@ p {
 
 /* フォームの設定 */
 form {
-  max-width: 600px; /* 最大幅を指定する */
-  margin: 0 auto; /* 中央揃えにする */
-  font-size: 17px;
+  max-width: 640px;
+  margin: 0 auto;
+  font-size: 16px;
 }
 
 /* ラベルの設定 */
@@ -50,50 +51,56 @@ label {
 }
 
 /* テキストエリアの設定 */
-textarea {
-  display: block; /* ブロック要素にする */
-  width: 100%; /* 幅を100%にする */
-  height: 100px; /* 高さを指定する */
-  border: 1px solid #ccc; /* 枠線を指定する */
-  padding: 10px; /* パディングを付ける */
+textarea, input[type="file"] {
+  display: block;
+  width: 100%;
+  border: 1px solid #dfe3e8;
+  padding: 10px;
   font-size: 15px;
+  border-radius: 6px;
+  background: white;
 }
+textarea { height: 120px; }
 
 /* ボタンの設定 */
 button {
-      width: 100%; /* 幅を100%にする */
-      background-color: #0077cc;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 18px;
-      margin-bottom: 15px;
-      margin-top: 15px;
-      height: 40px; 
+  width: 100%;
+  background-color: #0f62fe;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 12px;
+  margin-top: 12px;
+  height: 44px;
+}
+button:hover { background-color: #0353e9; }
+
+/* Share button row */
+.header-share { position:absolute; right:12px; top:50%; transform: translateY(-50%); width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background: rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:8px; cursor:pointer; }
+.header-share:hover { background: rgba(255,255,255,0.24); }
+.header-share svg { width:20px; height:20px; fill: currentColor; }
+
+  #container {
+    max-width: 720px;
+    margin: 24px auto 24px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    border: 1px solid #e6e8eb;
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.04);
     }
 
-      #container {
-            max-width: 700px;
-            margin: 0 auto;
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        #container2 {
-            max-width: 700px;
-            margin: 0 auto;
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
+    #container2 {
+      max-width: 720px;
+      margin: 0 auto 40px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 12px;
+      border: 1px solid #e6e8eb;
+      box-shadow: 0px 1px 2px rgba(0,0,0,0.04);
+    }
 
 #reply-container {
   max-width: 600px; /* 最大幅を指定する */
@@ -101,25 +108,53 @@ button {
 }
 
 /* 意見と返信のdiv要素の設定 */
-.opinion-div {
-  margin-bottom: 20px; /* 下にマージンを付ける */ 
-}
+.opinion-div { margin-bottom: 16px; border: 1px solid #eee; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; gap: 8px; }
+.opinion-div.latest { border-color: #0f62fe; box-shadow: 0 0 0 3px rgba(15,98,254,0.12); }
 
 /* 意見と返信のp要素の設定 */ 
-.opinion-p, .reply-p {
-  padding: 10px; /* パディングを付ける */ 
-}
+.opinion-p, .reply-p, .meta { padding: 10px; }
 
 
 /* 意見のp要素の設定 */ 
-.opinion-p {
-  background-color: #f0f0f0; /* 背景色を指定する */
-}
+.opinion-p, .reply-p { display: inline-block; max-width: calc(100% - 40px); border-radius: 16px; padding: 10px 12px; position: relative; }
+.opinion-p { align-self: flex-end; background: #f0f4ff; border: 1px solid #dbe6ff; }
+.reply-p { align-self: flex-start; background: #e7f7ee; border: 1px solid #cdeed9; }
+/* bubble tails (question: right, reply: left) */
+.opinion-p:after { content: ""; position: absolute; right: -8px; top: 14px; border-width: 8px; border-style: solid; border-color: transparent transparent transparent #dbe6ff; }
+.opinion-p:before { content: ""; position: absolute; right: -6px; top: 15px; border-width: 7px; border-style: solid; border-color: transparent transparent transparent #f0f4ff; }
+.reply-p:after { content: ""; position: absolute; left: -8px; top: 14px; border-width: 8px; border-style: solid; border-color: transparent #cdeed9 transparent transparent; }
+.reply-p:before { content: ""; position: absolute; left: -6px; top: 15px; border-width: 7px; border-style: solid; border-color: transparent #e7f7ee transparent transparent; }
 
 /* 返信のp要素の設定 */ 
-.reply-p {
-  background-color: #e0e0e0; /* 背景色を指定する */
-}
+.meta { font-size: 12px; color: #666; border-top: 1px dashed #eee; }
+
+.thumb { width: 100%; max-height: 320px; object-fit: cover; display:block; }
+.meta { font-size: 12px; color: #666; border-top: 1px dashed #eee; }
+.like-row { display:flex; align-items:center; gap:8px; padding: 8px 10px; border-top: 1px solid #eee; }
+.like-btn { background:#e8f0fe; color:#0f62fe; border:none; border-radius: 16px; padding:6px 12px; cursor:pointer; font-size:13px; }
+.like-btn:hover { background:#d4e3ff; }
+.like-count { font-size:13px; color:#333; }
+.loading { opacity: 0.7; pointer-events: none; }
+.spinner { display: none; font-size: 14px; color: #444; }
+.loading .spinner { display: inline; }
+/* inline spinners */
+.spinner-inline { width:24px; height:24px; border:3px solid #d9d9d9; border-top-color:#0f62fe; border-radius:50%; animation: spin 1s linear infinite; margin:12px auto; }
+.btn-spinner { width:14px; height:14px; border:2px solid #cfd8ff; border-top-color:#0f62fe; border-radius:50%; animation: spin 0.8s linear infinite; display:none; }
+.like-btn.loading + .btn-spinner { display:inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Share modal */
+.modal { display:none; position:fixed; inset:0; background: rgba(0,0,0,0.4); align-items:center; justify-content:center; padding:16px; z-index:1000; }
+.modal.show { display:flex; }
+.modal-card { width:100%; max-width:380px; background:#fff; border-radius:12px; border:1px solid #e6e8eb; box-shadow:0 8px 24px rgba(0,0,0,0.12); overflow:hidden; }
+.modal-header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid #eee; }
+.modal-close { background:transparent; border:none; font-size:20px; line-height:1; cursor:pointer; }
+.qr { padding:16px; display:flex; align-items:center; justify-content:center; }
+.link-box { display:flex; gap:8px; padding:0 16px 16px; }
+.link-box input { flex:1; border:1px solid #dfe3e8; padding:8px 10px; border-radius:6px; }
+.copy-btn, .native-share-btn { min-width:120px; height:36px; border:none; border-radius:8px; background:#0f62fe; color:#fff; cursor:pointer; }
+.copy-btn:hover, .native-share-btn:hover { background:#0353e9; }
+.modal-actions { padding:0 16px 16px; display:flex; justify-content:flex-end; }
 
 /* メディアクエリで画面幅が600px以下のときのスタイルを指定する */
 @media screen and (max-width: 600px) {
@@ -139,15 +174,25 @@ button {
 </head>
 <body>
 
-  <h1>意見箱Online</h1>
+  <h1>
+    意見箱Online
+    <button type="button" class="header-share" id="shareBtn" aria-label="共有" title="共有">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.27 3.27 0 0 0 0-1.39l7.02-4.11A2.99 2.99 0 1 0 14 5a3 3 0 0 0 .05.53L7.02 9.64a3 3 0 1 0 0 4.72l7.03 4.11c-.03.17-.05.34-.05.53a3 3 0 1 0 3-3.0z"/>
+      </svg>
+    </button>
+  </h1>
   <div id="container"> 
   <p  id style="text-align: center;">このページでは、生徒の皆さんからの意見を匿名で受け付けています。<br>生徒会からの返信があり次第、ページの下部に表示されます。</p>
   <br>
-  <br>
+  
   <form id="opinion-form">
     <label for="opinion">あなたの意見を入力してください</label>
     <textarea id="opinion" name="opinion" rows="5" cols="40" required></textarea>
+  <label for="photo">写真（任意・画像のみ）</label>
+  <input id="photo" name="photo" type="file" accept="image/*" />
     <button type="submit">送信</button>
+  <span class="spinner" id="uploadSpinner">アップロード中...</span>
   </form>
 </div>
 <div id="container2">
@@ -160,9 +205,220 @@ button {
 
 <br>
   <p  id style="text-align: center;">©別府翔青高校生徒会</p>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <script src="script.js"></script>
+  <!-- Share Modal -->
+  <div id="shareModal" class="modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+      <div class="modal-header">
+        <h3 id="shareTitle">共有</h3>
+        <button type="button" class="modal-close" id="shareClose">×</button>
+      </div>
+      <div class="qr" id="qrWrap">
+        <img id="qrImg" alt="QRコード" width="240" height="240" />
+      </div>
+      <div class="link-box">
+        <input type="text" id="shareLink" readonly />
+        <button type="button" class="copy-btn" id="copyLinkBtn">リンクをコピー</button>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="native-share-btn" id="nativeShareBtn" style="display:none;">端末で共有</button>
+      </div>
+    </div>
+  </div>
+  <script src="config.js"></script>
+  <script>
+    (function() {
+      const cfg = window.IKENBAKO_CONFIG || {};
+      const BASE = cfg.GAS_BASE_URL || '';
+      const opinionForm = document.getElementById('opinion-form');
+      const replyContainer = document.getElementById('reply-container');
+      // Share elements
+      const shareBtn = document.getElementById('shareBtn');
+      const shareModal = document.getElementById('shareModal');
+      const shareClose = document.getElementById('shareClose');
+      const qrImg = document.getElementById('qrImg');
+      const shareLinkInput = document.getElementById('shareLink');
+      const copyLinkBtn = document.getElementById('copyLinkBtn');
+      const nativeShareBtn = document.getElementById('nativeShareBtn');
+
+      // Share modal logic
+      function openShare() {
+        const url = window.location.href;
+        shareLinkInput.value = url;
+        // Use provided static QR image
+        qrImg.src = 'https://ikenbako.github.io/html/QR_233400.png';
+        shareModal.classList.add('show');
+        shareModal.setAttribute('aria-hidden', 'false');
+        if (navigator.share) {
+          nativeShareBtn.style.display = '';
+        } else {
+          nativeShareBtn.style.display = 'none';
+        }
+      }
+      function closeShare() {
+        shareModal.classList.remove('show');
+        shareModal.setAttribute('aria-hidden', 'true');
+      }
+      shareBtn && shareBtn.addEventListener('click', openShare);
+      shareClose && shareClose.addEventListener('click', closeShare);
+      shareModal && shareModal.addEventListener('click', (e) => { if (e.target === shareModal) closeShare(); });
+      copyLinkBtn && copyLinkBtn.addEventListener('click', async () => {
+        const url = shareLinkInput.value;
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(url);
+          } else {
+            shareLinkInput.select();
+            document.execCommand('copy');
+          }
+          copyLinkBtn.textContent = 'コピーしました';
+          setTimeout(() => (copyLinkBtn.textContent = 'リンクをコピー'), 1500);
+        } catch (_) { alert('コピーに失敗しました'); }
+      });
+      nativeShareBtn && nativeShareBtn.addEventListener('click', async () => {
+        try { await navigator.share({ title: document.title, url: window.location.href }); } catch (_) {}
+      });
+  
+
+      function alertError(err) { console.error(err); alert('エラーが発生しました。時間をおいて再度お試しください。'); }
+
+      function formatTime(iso) {
+        if (!iso) return '';
+        try { const d = new Date(iso); return d.toLocaleString(); } catch (_) { return iso; }
+      }
+
+      async function listReplied() {
+        if (!BASE) return; // not configured yet
+        replyContainer.innerHTML = '';
+        // show list spinner while fetching
+        const listSpinner = document.createElement('div');
+        listSpinner.className = 'spinner-inline';
+        replyContainer.appendChild(listSpinner);
+        try {
+          const url = `${BASE}?action=list&filter=replied`;
+          const res = await fetch(url, { method: 'GET' });
+          const data = await res.json();
+          if (!Array.isArray(data)) return;
+          // remove spinner and render
+          replyContainer.innerHTML = '';
+          data.forEach((item, idx) => {
+            if (!item.reply) return;
+            const div = document.createElement('div');
+            div.className = 'opinion-div';
+            if (idx === 0) div.classList.add('latest');
+            const op = document.createElement('p');
+            op.className = 'opinion-p';
+            op.textContent = `意見：${item.opinion}`;
+            const rp = document.createElement('p');
+            rp.className = 'reply-p';
+            rp.textContent = `返信：${item.reply}`;
+            if (item.imageUrl) {
+              const img = document.createElement('img');
+              img.className = 'thumb';
+              img.src = item.imageUrl;
+              img.alt = '添付画像';
+              img.onerror = () => {
+                // For formats the browser can’t render (e.g., HEIC), show a link instead
+                const a = document.createElement('a');
+                a.href = item.imageUrl;
+                a.target = '_blank';
+                a.textContent = '画像を開く';
+                img.replaceWith(a);
+              };
+              div.appendChild(img);
+            }
+            const meta = document.createElement('div');
+            meta.className = 'meta';
+            meta.textContent = `投稿: ${formatTime(item.createdAt)} / 返信: ${formatTime(item.repliedAt)}`;
+            div.appendChild(op);
+            div.appendChild(rp);
+            div.appendChild(meta);
+            const likeRow = document.createElement('div');
+            likeRow.className = 'like-row';
+            const likeBtn = document.createElement('button');
+            likeBtn.className = 'like-btn';
+            likeBtn.textContent = '👍';
+            const likeSpin = document.createElement('span');
+            likeSpin.className = 'btn-spinner';
+            const likeCount = document.createElement('span');
+            likeCount.className = 'like-count';
+            likeCount.textContent = `${item.likes || 0}`;
+            likeBtn.addEventListener('click', async () => {
+              // optimistic increment
+              const prev = parseInt(likeCount.textContent, 10) || 0;
+              likeCount.textContent = `${prev + 1}`;
+              try {
+                likeBtn.disabled = true;
+                likeBtn.classList.add('loading');
+                const form = new URLSearchParams();
+                form.set('action', 'like');
+                form.set('id', item.id);
+                const res = await fetch(BASE, { method: 'POST', body: form });
+                const data = await res.json();
+                if (data && data.status === 'ok' && typeof data.likes !== 'undefined') {
+                  likeCount.textContent = `${data.likes}`; // replace with server value
+                } else {
+                  likeCount.textContent = `${prev}`; // revert on unexpected response
+                }
+              } catch (e) {
+                likeCount.textContent = `${prev}`; // revert on error
+              } finally { likeBtn.disabled = false; likeBtn.classList.remove('loading'); }
+            });
+            likeRow.appendChild(likeBtn);
+            likeRow.appendChild(likeSpin);
+            likeRow.appendChild(likeCount);
+            div.appendChild(likeRow);
+            replyContainer.appendChild(div);
+          });
+        } catch (e) { alertError(e); replyContainer.innerHTML = ''; }
+      }
+
+    opinionForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const opinion = opinionForm.opinion.value.trim();
+        const photoInput = document.getElementById('photo');
+        if (!opinion) return;
+        if (!BASE) { alert('設定が未完了です（config.js の GAS_BASE_URL を設定）'); return; }
+        try {
+      // lock UI
+      opinionForm.classList.add('loading');
+          let res;
+          const file = photoInput && photoInput.files && photoInput.files[0];
+          if (file) {
+            // Convert to base64 data URL
+            const dataUrl = await new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = reject;
+              reader.readAsDataURL(file);
+            });
+            const form = new URLSearchParams();
+            form.set('action', 'add');
+            form.set('opinion', opinion);
+            form.set('imageBase64', dataUrl);
+            form.set('imageType', file.type || '');
+            form.set('imageName', file.name || '');
+            res = await fetch(BASE, { method: 'POST', body: form });
+          } else {
+            const form = new URLSearchParams();
+            form.set('action', 'add');
+            form.set('opinion', opinion);
+            res = await fetch(BASE, { method: 'POST', body: form });
+          }
+
+          const data = await res.json();
+          if (data && data.status === 'ok') {
+            opinionForm.reset();
+            alert('送信が完了しました。');
+          } else {
+            alertError(data);
+          }
+        } catch (e) { alertError(e); }
+  finally { opinionForm.classList.remove('loading'); }
+      });
+
+      window.addEventListener('load', listReplied);
+    })();
+  </script>
 </body>
 </html>
 

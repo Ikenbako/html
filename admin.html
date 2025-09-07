@@ -16,20 +16,18 @@
 
 /* フォントの設定 */
 body {
-  font-family: "Noto Sans JP", sans-serif; /* 日本語対応のフォントを指定する */
-  font-size: 16px; /* 基本のフォントサイズを指定する */
-  color: #333; /* 基本の文字色を指定する */
-
-  font-family: 'M PLUS 1', sans-serif;
-font-family: 'Noto Sans JP', sans-serif;
+  font-family: 'M PLUS 1', 'Noto Sans JP', sans-serif;
+  font-size: 16px;
+  color: #222;
+  background: #f6f7f9;
 }
 
 /* ヘッダーの設定 */
 h1 {
-  text-align: center; /* 中央揃えにする */
-  font-size: 2rem; /* フォントサイズを大きくする */
-  padding: 20px; /* パディングを付ける */
-  background-color: #4bec86; /* 背景色を指定する */
+  text-align: center;
+  font-size: 1.75rem;
+  padding: 16px;
+  background-color: #24a148; /* Green without gradient */
   color: white;
 }
 
@@ -39,27 +37,22 @@ p {
 }
 
 /* 意見コンテナーの設定 */
-#opinion-container {
-  max-width: 600px; /* 最大幅を指定する */
-  margin: 0 auto; /* 中央揃えにする */ 
-}
+#opinion-container { max-width: 720px; margin: 0 auto; }
 
 /* 意見と返信フォームのdiv要素の設定 */
-.opinion-div {
-  margin-bottom: 20px; /* 下にマージンを付ける */ 
-}
+.opinion-div { margin-bottom: 16px; border: 1px solid #eee; border-radius: 10px; overflow: hidden; display:flex; flex-direction: column; gap:8px; }
 
 /* 意見のp要素の設定 */ 
-.opinion-p {
-  padding: 10px; /* パディングを付ける */
-  background-color: #f0f0f0; /* 背景色を指定する */
-}
+.opinion-p, .reply-p { display: inline-block; max-width: calc(100% - 40px); border-radius: 16px; padding: 10px 12px; position: relative; }
+.opinion-p { align-self: flex-end; background: #f0f4ff; border: 1px solid #dbe6ff; }
+.reply-p { align-self: flex-start; background: #e7f7ee; border: 1px solid #cdeed9; }
+.opinion-p:after { content: ""; position: absolute; right: -8px; top: 14px; border-width: 8px; border-style: solid; border-color: transparent transparent transparent #dbe6ff; }
+.opinion-p:before { content: ""; position: absolute; right: -6px; top: 15px; border-width: 7px; border-style: solid; border-color: transparent transparent transparent #f0f4ff; }
+.reply-p:after { content: ""; position: absolute; left: -8px; top: 14px; border-width: 8px; border-style: solid; border-color: transparent #cdeed9 transparent transparent; }
+.reply-p:before { content: ""; position: absolute; left: -6px; top: 15px; border-width: 7px; border-style: solid; border-color: transparent #e7f7ee transparent transparent; }
 
 /* 返信フォームの設定 */
-.reply-form {
-  display: flex; /* フレックスボックスにする */
-  flex-wrap: wrap; /* 折り返しを許可する */
-}
+.reply-form { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start; padding: 10px; }
 
 /* ラベルの設定 */
 label {
@@ -69,44 +62,32 @@ label {
 
 /* テキストエリアの設定 */
 textarea {
-  flex-grow: 1; /* 残りのスペースを埋める */
-  height: 80px; /* 高さを指定する */
-  border: 1px solid #ccc; /* 枠線を指定する */
-  padding: 10px; /* パディングを付ける */
+  flex-grow: 1;
+  height: 80px;
+  border: 1px solid #dfe3e8;
+  padding: 10px;
   font-size: 15px;
+  border-radius: 6px;
+  background: white;
 }
 
 /* ボタンの設定 */
-button {
-  width: 100px; /* 幅を指定する */
-  height: 40px; /* 高さを指定する */
-  border: none; /* 枠線を消す */
-  background-color: #333; /* 背景色を指定する */
-  color: #fff; /* 文字色を指定する */
-  font-weight: bold; /* 文字を太くする */
-}
+button { min-width: 96px; height: 40px; border: none; background-color: #0f62fe; color: #fff; font-weight: 600; border-radius: 8px; cursor: pointer; }
+button:hover { background: #0353e9; }
 
-#container {
-            max-width: 700px;
-            margin: 0 auto;
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
+/* inline spinner */
+.spinner-inline { width:24px; height:24px; border:3px solid #d9d9d9; border-top-color:#0f62fe; border-radius:50%; animation: spin 1s linear infinite; margin:12px auto; }
+.btn-spinner { width:14px; height:14px; border:2px solid #cfd8ff; border-top-color:#0f62fe; border-radius:50%; animation: spin 0.8s linear infinite; display:none; margin-left:8px; }
+.loading .btn-spinner { display:inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-        #container2 {
-            max-width: 700px;
-            margin: 0 auto;
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
+#container { max-width: 760px; margin: 24px auto; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #e6e8eb; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+
+  #container2 { max-width: 760px; margin: 0 auto 40px; padding: 20px; background: #fff; border-radius: 12px; border: 1px solid #e6e8eb; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+
+.thumb { width: 100%; max-height: 360px; object-fit: cover; display:block; }
+.meta { font-size: 12px; color: #666; padding: 8px 10px; border-top: 1px dashed #eee; }
+/* remove old flat style for reply bubble to avoid conflict */
 
 /* メディアクエリで画面幅が600px以下のときのスタイルを指定する */
 @media screen and (max-width: 600px) {
@@ -142,8 +123,7 @@ button {
 <!-- 返信済みリストのコンテナー -->
 <div id="replied-container"></div>
 </div>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="config.js"></script>
   <script src="admin.js"></script>
 </div>
 </body>
