@@ -115,6 +115,9 @@ button:hover { background-color: #0353e9; }
 
 .thumb { width: 100%; max-height: 320px; object-fit: cover; display:block; }
 .meta { font-size: 12px; color: #666; border-top: 1px dashed #eee; }
+.loading { opacity: 0.7; pointer-events: none; }
+.spinner { display: none; font-size: 14px; color: #444; }
+.loading .spinner { display: inline; }
 
 /* メディアクエリで画面幅が600px以下のときのスタイルを指定する */
 @media screen and (max-width: 600px) {
@@ -145,6 +148,7 @@ button:hover { background-color: #0353e9; }
   <label for="photo">写真（任意・画像のみ）</label>
   <input id="photo" name="photo" type="file" accept="image/*" />
     <button type="submit">送信</button>
+  <span class="spinner" id="uploadSpinner">アップロード中...</span>
   </form>
 </div>
 <div id="container2">
@@ -216,13 +220,15 @@ button:hover { background-color: #0353e9; }
         } catch (e) { alertError(e); }
       }
 
-      opinionForm.addEventListener('submit', async function(event) {
+    opinionForm.addEventListener('submit', async function(event) {
         event.preventDefault();
         const opinion = opinionForm.opinion.value.trim();
         const photoInput = document.getElementById('photo');
         if (!opinion) return;
         if (!BASE) { alert('設定が未完了です（config.js の GAS_BASE_URL を設定）'); return; }
         try {
+      // lock UI
+      opinionForm.classList.add('loading');
           let res;
           const file = photoInput && photoInput.files && photoInput.files[0];
           if (file) {
@@ -254,6 +260,7 @@ button:hover { background-color: #0353e9; }
             alertError(data);
           }
         } catch (e) { alertError(e); }
+  finally { opinionForm.classList.remove('loading'); }
       });
 
       window.addEventListener('load', listReplied);

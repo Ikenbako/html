@@ -76,6 +76,7 @@
         deleteButton.addEventListener('click', async function() {
           if (!confirm('本当にこの意見を削除しますか？')) return;
           try {
+            deleteButton.disabled = true;
             const form = new URLSearchParams();
             form.set('action', 'delete');
             form.set('id', op.id);
@@ -86,12 +87,14 @@
               opinionDiv.remove();
             } else { alertError(data); }
           } catch (e) { alertError(e); }
+          finally { deleteButton.disabled = false; }
         });
 
         replyForm.addEventListener('submit', async function(event) {
           event.preventDefault();
           const reply = replyTextarea.value.trim();
           try {
+            replyButton.disabled = true;
             const form = new URLSearchParams();
             form.set('action', 'reply');
             form.set('id', op.id);
@@ -104,6 +107,7 @@
               showReplied();
             } else { alertError(data); }
           } catch (e) { alertError(e); }
+          finally { replyButton.disabled = false; }
         });
 
         replyForm.appendChild(replyLabel);
