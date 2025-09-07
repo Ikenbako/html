@@ -116,7 +116,7 @@
         replyForm.appendChild(deleteButton);
   const meta = document.createElement('div');
   meta.className = 'meta';
-  meta.textContent = '投稿: ' + formatTime(op.createdAt);
+  meta.textContent = '投稿: ' + formatTime(op.createdAt) + (typeof op.likes !== 'undefined' ? ' / 👍 ' + (op.likes || 0) : '');
   opinionDiv.appendChild(opinionP);
         opinionDiv.appendChild(replyForm);
   opinionDiv.appendChild(meta);
@@ -152,9 +152,9 @@
         const replyP = document.createElement('p');
         replyP.className = 'reply-p';
         replyP.textContent = '返信：' + (op.reply || '');
-        const meta = document.createElement('div');
+  const meta = document.createElement('div');
         meta.className = 'meta';
-        meta.textContent = '投稿: ' + formatTime(op.createdAt) + ' / 返信: ' + formatTime(op.repliedAt);
+  meta.textContent = '投稿: ' + formatTime(op.createdAt) + ' / 返信: ' + formatTime(op.repliedAt) + (typeof op.likes !== 'undefined' ? ' / 👍 ' + (op.likes || 0) : '');
         const deleteButton = document.createElement('button');
         deleteButton.type = 'button';
         deleteButton.textContent = '削除';

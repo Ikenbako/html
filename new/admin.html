@@ -40,10 +40,16 @@ p {
 #opinion-container { max-width: 720px; margin: 0 auto; }
 
 /* 意見と返信フォームのdiv要素の設定 */
-.opinion-div { margin-bottom: 16px; border: 1px solid #eee; border-radius: 10px; overflow: hidden; }
+.opinion-div { margin-bottom: 16px; border: 1px solid #eee; border-radius: 10px; overflow: hidden; display:flex; flex-direction: column; gap:8px; }
 
 /* 意見のp要素の設定 */ 
-.opinion-p { padding: 10px; background-color: #fafbfc; }
+.opinion-p, .reply-p { display: inline-block; max-width: calc(100% - 40px); border-radius: 16px; padding: 10px 12px; position: relative; }
+.opinion-p { align-self: flex-end; background: #f0f4ff; border: 1px solid #dbe6ff; }
+.reply-p { align-self: flex-start; background: #e7f7ee; border: 1px solid #cdeed9; }
+.opinion-p:after { content: ""; position: absolute; right: -8px; top: 14px; border-width: 8px; border-style: solid; border-color: transparent transparent transparent #dbe6ff; }
+.opinion-p:before { content: ""; position: absolute; right: -6px; top: 15px; border-width: 7px; border-style: solid; border-color: transparent transparent transparent #f0f4ff; }
+.reply-p:after { content: ""; position: absolute; left: -8px; top: 14px; border-width: 8px; border-style: solid; border-color: transparent #cdeed9 transparent transparent; }
+.reply-p:before { content: ""; position: absolute; left: -6px; top: 15px; border-width: 7px; border-style: solid; border-color: transparent #e7f7ee transparent transparent; }
 
 /* 返信フォームの設定 */
 .reply-form { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start; padding: 10px; }
@@ -75,6 +81,7 @@ button:hover { background: #0353e9; }
 
 .thumb { width: 100%; max-height: 360px; object-fit: cover; display:block; }
 .meta { font-size: 12px; color: #666; padding: 8px 10px; border-top: 1px dashed #eee; }
+/* remove old flat style for reply bubble to avoid conflict */
 
 /* メディアクエリで画面幅が600px以下のときのスタイルを指定する */
 @media screen and (max-width: 600px) {

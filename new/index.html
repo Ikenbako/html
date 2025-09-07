@@ -28,6 +28,8 @@ h1 {
   padding: 16px;
   background-color: #0f62fe; /* IBM Blue */
   color: white;
+  position: relative;
+  padding-right: 56px; /* space for share icon */
 }
 
 /* 段落の設定 */
@@ -75,6 +77,11 @@ button {
 }
 button:hover { background-color: #0353e9; }
 
+/* Share button row */
+.header-share { position:absolute; right:12px; top:50%; transform: translateY(-50%); width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background: rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.2); color:#fff; border-radius:8px; cursor:pointer; }
+.header-share:hover { background: rgba(255,255,255,0.24); }
+.header-share svg { width:20px; height:20px; fill: currentColor; }
+
   #container {
     max-width: 720px;
     margin: 24px auto 24px;
@@ -101,23 +108,48 @@ button:hover { background-color: #0353e9; }
 }
 
 /* 意見と返信のdiv要素の設定 */
-.opinion-div { margin-bottom: 16px; border: 1px solid #eee; border-radius: 10px; overflow: hidden; }
+.opinion-div { margin-bottom: 16px; border: 1px solid #eee; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; gap: 8px; }
+.opinion-div.latest { border-color: #0f62fe; box-shadow: 0 0 0 3px rgba(15,98,254,0.12); }
 
 /* 意見と返信のp要素の設定 */ 
 .opinion-p, .reply-p, .meta { padding: 10px; }
 
 
 /* 意見のp要素の設定 */ 
-.opinion-p { background-color: #fafbfc; }
+.opinion-p, .reply-p { display: inline-block; max-width: calc(100% - 40px); border-radius: 16px; padding: 10px 12px; position: relative; }
+.opinion-p { align-self: flex-end; background: #f0f4ff; border: 1px solid #dbe6ff; }
+.reply-p { align-self: flex-start; background: #e7f7ee; border: 1px solid #cdeed9; }
+/* bubble tails (question: right, reply: left) */
+.opinion-p:after { content: ""; position: absolute; right: -8px; top: 14px; border-width: 8px; border-style: solid; border-color: transparent transparent transparent #dbe6ff; }
+.opinion-p:before { content: ""; position: absolute; right: -6px; top: 15px; border-width: 7px; border-style: solid; border-color: transparent transparent transparent #f0f4ff; }
+.reply-p:after { content: ""; position: absolute; left: -8px; top: 14px; border-width: 8px; border-style: solid; border-color: transparent #cdeed9 transparent transparent; }
+.reply-p:before { content: ""; position: absolute; left: -6px; top: 15px; border-width: 7px; border-style: solid; border-color: transparent #e7f7ee transparent transparent; }
 
 /* 返信のp要素の設定 */ 
-.reply-p { background-color: #f5f7f9; }
+.meta { font-size: 12px; color: #666; border-top: 1px dashed #eee; }
 
 .thumb { width: 100%; max-height: 320px; object-fit: cover; display:block; }
 .meta { font-size: 12px; color: #666; border-top: 1px dashed #eee; }
+.like-row { display:flex; align-items:center; gap:8px; padding: 8px 10px; border-top: 1px solid #eee; }
+.like-btn { background:#e8f0fe; color:#0f62fe; border:none; border-radius: 16px; padding:6px 12px; cursor:pointer; font-size:13px; }
+.like-btn:hover { background:#d4e3ff; }
+.like-count { font-size:13px; color:#333; }
 .loading { opacity: 0.7; pointer-events: none; }
 .spinner { display: none; font-size: 14px; color: #444; }
 .loading .spinner { display: inline; }
+
+/* Share modal */
+.modal { display:none; position:fixed; inset:0; background: rgba(0,0,0,0.4); align-items:center; justify-content:center; padding:16px; z-index:1000; }
+.modal.show { display:flex; }
+.modal-card { width:100%; max-width:380px; background:#fff; border-radius:12px; border:1px solid #e6e8eb; box-shadow:0 8px 24px rgba(0,0,0,0.12); overflow:hidden; }
+.modal-header { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid #eee; }
+.modal-close { background:transparent; border:none; font-size:20px; line-height:1; cursor:pointer; }
+.qr { padding:16px; display:flex; align-items:center; justify-content:center; }
+.link-box { display:flex; gap:8px; padding:0 16px 16px; }
+.link-box input { flex:1; border:1px solid #dfe3e8; padding:8px 10px; border-radius:6px; }
+.copy-btn, .native-share-btn { min-width:120px; height:36px; border:none; border-radius:8px; background:#0f62fe; color:#fff; cursor:pointer; }
+.copy-btn:hover, .native-share-btn:hover { background:#0353e9; }
+.modal-actions { padding:0 16px 16px; display:flex; justify-content:flex-end; }
 
 /* メディアクエリで画面幅が600px以下のときのスタイルを指定する */
 @media screen and (max-width: 600px) {
@@ -137,11 +169,18 @@ button:hover { background-color: #0353e9; }
 </head>
 <body>
 
-  <h1>意見箱Online</h1>
+  <h1>
+    意見箱Online
+    <button type="button" class="header-share" id="shareBtn" aria-label="共有" title="共有">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.27 3.27 0 0 0 0-1.39l7.02-4.11A2.99 2.99 0 1 0 14 5a3 3 0 0 0 .05.53L7.02 9.64a3 3 0 1 0 0 4.72l7.03 4.11c-.03.17-.05.34-.05.53a3 3 0 1 0 3-3.0z"/>
+      </svg>
+    </button>
+  </h1>
   <div id="container"> 
   <p  id style="text-align: center;">このページでは、生徒の皆さんからの意見を匿名で受け付けています。<br>生徒会からの返信があり次第、ページの下部に表示されます。</p>
   <br>
-  <br>
+  
   <form id="opinion-form">
     <label for="opinion">あなたの意見を入力してください</label>
     <textarea id="opinion" name="opinion" rows="5" cols="40" required></textarea>
@@ -161,6 +200,25 @@ button:hover { background-color: #0353e9; }
 
 <br>
   <p  id style="text-align: center;">©別府翔青高校生徒会</p>
+  <!-- Share Modal -->
+  <div id="shareModal" class="modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+      <div class="modal-header">
+        <h3 id="shareTitle">共有</h3>
+        <button type="button" class="modal-close" id="shareClose">×</button>
+      </div>
+      <div class="qr" id="qrWrap">
+        <img id="qrImg" alt="QRコード" width="240" height="240" />
+      </div>
+      <div class="link-box">
+        <input type="text" id="shareLink" readonly />
+        <button type="button" class="copy-btn" id="copyLinkBtn">リンクをコピー</button>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="native-share-btn" id="nativeShareBtn" style="display:none;">端末で共有</button>
+      </div>
+    </div>
+  </div>
   <script src="config.js"></script>
   <script>
     (function() {
@@ -168,6 +226,53 @@ button:hover { background-color: #0353e9; }
       const BASE = cfg.GAS_BASE_URL || '';
       const opinionForm = document.getElementById('opinion-form');
       const replyContainer = document.getElementById('reply-container');
+      // Share elements
+      const shareBtn = document.getElementById('shareBtn');
+      const shareModal = document.getElementById('shareModal');
+      const shareClose = document.getElementById('shareClose');
+      const qrImg = document.getElementById('qrImg');
+      const shareLinkInput = document.getElementById('shareLink');
+      const copyLinkBtn = document.getElementById('copyLinkBtn');
+      const nativeShareBtn = document.getElementById('nativeShareBtn');
+
+      // Share modal logic
+      function openShare() {
+        const url = window.location.href;
+        shareLinkInput.value = url;
+        const qrUrl = 'https://chart.googleapis.com/chart?cht=qr&chs=240x240&choe=UTF-8&chl=' + encodeURIComponent(url);
+        qrImg.src = qrUrl;
+        shareModal.classList.add('show');
+        shareModal.setAttribute('aria-hidden', 'false');
+        if (navigator.share) {
+          nativeShareBtn.style.display = '';
+        } else {
+          nativeShareBtn.style.display = 'none';
+        }
+      }
+      function closeShare() {
+        shareModal.classList.remove('show');
+        shareModal.setAttribute('aria-hidden', 'true');
+      }
+      shareBtn && shareBtn.addEventListener('click', openShare);
+      shareClose && shareClose.addEventListener('click', closeShare);
+      shareModal && shareModal.addEventListener('click', (e) => { if (e.target === shareModal) closeShare(); });
+      copyLinkBtn && copyLinkBtn.addEventListener('click', async () => {
+        const url = shareLinkInput.value;
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(url);
+          } else {
+            shareLinkInput.select();
+            document.execCommand('copy');
+          }
+          copyLinkBtn.textContent = 'コピーしました';
+          setTimeout(() => (copyLinkBtn.textContent = 'リンクをコピー'), 1500);
+        } catch (_) { alert('コピーに失敗しました'); }
+      });
+      nativeShareBtn && nativeShareBtn.addEventListener('click', async () => {
+        try { await navigator.share({ title: document.title, url: window.location.href }); } catch (_) {}
+      });
+  
 
       function alertError(err) { console.error(err); alert('エラーが発生しました。時間をおいて再度お試しください。'); }
 
@@ -184,10 +289,11 @@ button:hover { background-color: #0353e9; }
           const res = await fetch(url, { method: 'GET' });
           const data = await res.json();
           if (!Array.isArray(data)) return;
-          data.forEach(item => {
+          data.forEach((item, idx) => {
             if (!item.reply) return;
             const div = document.createElement('div');
             div.className = 'opinion-div';
+            if (idx === 0) div.classList.add('latest');
             const op = document.createElement('p');
             op.className = 'opinion-p';
             op.textContent = `意見：${item.opinion}`;
@@ -215,6 +321,30 @@ button:hover { background-color: #0353e9; }
             div.appendChild(op);
             div.appendChild(rp);
             div.appendChild(meta);
+            const likeRow = document.createElement('div');
+            likeRow.className = 'like-row';
+            const likeBtn = document.createElement('button');
+            likeBtn.className = 'like-btn';
+            likeBtn.textContent = '👍';
+            const likeCount = document.createElement('span');
+            likeCount.className = 'like-count';
+            likeCount.textContent = `${item.likes || 0}`;
+            likeBtn.addEventListener('click', async () => {
+              try {
+                likeBtn.disabled = true;
+                const form = new URLSearchParams();
+                form.set('action', 'like');
+                form.set('id', item.id);
+                const res = await fetch(BASE, { method: 'POST', body: form });
+                const data = await res.json();
+                if (data && data.status === 'ok') {
+                  likeCount.textContent = `${data.likes}`;
+                }
+              } finally { likeBtn.disabled = false; }
+            });
+            likeRow.appendChild(likeBtn);
+            likeRow.appendChild(likeCount);
+            div.appendChild(likeRow);
             replyContainer.appendChild(div);
           });
         } catch (e) { alertError(e); }
@@ -252,6 +382,7 @@ button:hover { background-color: #0353e9; }
             form.set('opinion', opinion);
             res = await fetch(BASE, { method: 'POST', body: form });
           }
+
           const data = await res.json();
           if (data && data.status === 'ok') {
             opinionForm.reset();
